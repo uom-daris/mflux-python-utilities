@@ -9,6 +9,7 @@ Created on Fri Jan 27 10:00:41 2017
 import pandas as pd
 import asset_doctype_creator
 import find_plus
+import config_spreadsheet_set_metadata
 
 # spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/demoIDs.xlsx'
 # sheet = 'Sheet1'
@@ -93,7 +94,7 @@ for index, row in full_data.iterrows():
     # find_id_fun.find(row[assetNameCol],rootNamespaceName+"/"+projectName+"/"+subnamespace,projectName+":"+docTypeName,row)
     # find_id_fun.find_nested(row[assetNameCol],rootNamespaceName+"/"+projectName+"/"+subnamespace,projectName+":"+docTypeName,row,parent)
     # find_id_fun.find_id_nested(row[assetNameCol],rootNamespaceName+"/"+projectName+"/"+subnamespace,projectName+":"+docTypeName,row,parent)
-    find_id_fun.find_id_nested_attributes(row[assetNameCol],rootNamespaceName+"/"+projectName+"/"+subnamespace,projectName+":"+docTypeName,row,parent,uniqueAttributes,dataTypes)
+    find_plus.find_id_nested_attributes(row[assetNameCol],rootNamespaceName+"/"+projectName+"/"+subnamespace,projectName+":"+docTypeName,row,parent,uniqueAttributes,dataTypes)
 
 # Turn the pandas dataframe into
 # full_dict = full_data.to_dict(orient='records')

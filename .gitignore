@@ -105,3 +105,9 @@ config_connect.py
 
 # pycharm stuff
 .idea/
+
+# data
+*.txt
+*.csv
+*.xlsx
+

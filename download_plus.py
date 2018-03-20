@@ -17,7 +17,7 @@ namespace = '/projects/proj-demonstration-1128.4.15/possums'
 localspace = '/Users/jwinton/Desktop/Demo/possums'
 doctype = 'proj-demonstration-1128.4.15:jaredtestPossum6'
 headings = []
-csv_file = "possum_results_.csv"
+csv_file = "possum_results.csv"
 metadataDictionary = []
 parent = "animal"
 

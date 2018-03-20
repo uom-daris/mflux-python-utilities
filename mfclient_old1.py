@@ -752,11 +752,9 @@ class MFConnection(object):
         :type token: str
         :param token_type: Type of secure identity token
         :type token_type: str
-        :param timeout: socket connection timeout.
-                        See also https://stackoverflow.com/questions/2719017/how-to-set-timeout-on-pythons-socket-recv-method
+        :param timeout: socket timeout
         :type timeout: float
-        :param recv_timeout: socket receive timeout. Defaults to 10.0 seconds.
-                        See also https://stackoverflow.com/questions/2719017/how-to-set-timeout-on-pythons-socket-recv-method
+        :param recv_timeout: receive timeout. Defaults to 10.0 seconds
         :type recv_timeout: float
         :param app: application name. Optional, can be used to restrict the secure identity tokens.
         :type app: str
@@ -871,7 +869,7 @@ class MFConnection(object):
 
     def _open_socket(self):
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self._sock.settimeout(self._timeout)  # connection timeout
+        self._sock.settimeout(self._timeout)
         if self.proxy is not None:
             (proxy_host, proxy_port, proxy_user, proxy_password) = self.proxy
             self._sock.connect((proxy_host, proxy_port))
@@ -975,7 +973,7 @@ class MFConnection(object):
             # send http request
             request.send(self._sock)
             # receive http response
-            response = _MFResponse(outputs, timeout=self._recv_timeout)
+            response = _MFResponse(outputs)
             response.recv(self._sock)
             if response.error is not None:
                 raise ExHttpResponse(str(response.error))
@@ -1300,7 +1298,7 @@ class _MFRequest(object):
 
 
 class _MFResponse(object):
-    def __init__(self, outputs, timeout=None):
+    def __init__(self, outputs):
         if outputs is None:
             self._outputs = []
         else:
@@ -1309,7 +1307,6 @@ class _MFResponse(object):
                 self._outputs = [outputs]
             else:
                 self._outputs = outputs
-        self._timeout = timeout
         self._http_version = None
         self._http_status_code = None
         self._http_status_message = None
@@ -1326,7 +1323,6 @@ class _MFResponse(object):
         return self._error
 
     def recv(self, sock):
-        sock.settimeout(self._timeout)
         bytes_received = self._recv_header(sock)
         pkt_idx = 0  # packet index
         while True:

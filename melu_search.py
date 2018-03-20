@@ -3,19 +3,20 @@ import mf_connect
 import pandas as pd
 import time
 import csv
+import re as reg
 import unicodedata
 
 nameSpace = "/projects/proj-MELU-1128.4.29"
 # nameSpace = "/projects/proj-MELU-1128.4.29/Diagrams_illustrations_notes"
 
 # spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/demoIDs.xlsx'
-# spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/MELUSpecifyDBunique_15june2017-JW-just_IDs.xlsx'
-spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/catalognumbers.xlsx'
+spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/MELUSpecifyDBunique_15june2017-JW-just_IDs.xlsx'
+# spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/catalognumbers.xlsx'
 # spreadsheet = '/Users/jwinton/Documents/VicNode/MELU/two searchers.xlsx'
 asheet = 'a'
 abcsheet = 'abc'
-# assetNameCol = "Catalogue no."
-assetNameCol = "ID"
+assetNameCol = "Catalogue no."
+# assetNameCol = "ID"
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
 
@@ -118,14 +119,17 @@ def main():
         #         #     print mid3
         #
         #         # When wanting to include the trailing letter
-                mid4 = row[assetNameCol ][5:12]
+        #         mid4 = row[assetNameCol ][5:12]
         #         # print mid4
         #
                 match = 0
+                id_match = r"[^0-9]" + reg.escape(str(mid3)) + r"[^0-9]"
+                melu_match = r"^MELU"
                 for i in results.keys():
-                    if mid3 in results[i]['name']:
-                        # print mid3
-                        # print results[i]
+                    if reg.search(melu_match, results[i]['name']) and reg.search(id_match, results[i]['name']):
+                    # if mid3 in results[i]['name']:
+                        print id_match
+                        print results[i]
                         line = {}
                         line.update({'meluID': row[assetNameCol]})
                         line.update({'id': results[i]['id']})
@@ -138,9 +142,11 @@ def main():
                 if match == 0:
                     for i in results.keys():
                         mid3 = mid3.lstrip("0")
-                        if mid3 in results[i]['name']:
-                            # print mid3
-                            # print results[i]
+                        id_match = r"[^0-9]" + reg.escape(str(mid3)) + r"[^0-9]"
+                        if reg.search(melu_match, results[i]['name']) and reg.search(id_match, results[i]['name']):
+                        # if mid3 in results[i]['name']:
+                            print id_match
+                            print results[i]
                             line = {}
                             line.update({'meluID': row[assetNameCol]})
                             line.update({'id': results[i]['id']})
@@ -168,17 +174,20 @@ def main():
             # print assetID
             if not is_number(row[assetNameCol]) and row[assetNameCol] != assetNameCol:
                 # When wanting to exclude the trailing letter
-                mid3 = row[assetNameCol][5:11]
+                # mid3 = row[assetNameCol][5:11]
         #         # print mid3
         #
                 # When wanting to include the trailing letter
                 mid4 = row[assetNameCol][5:12]
         #         # print mid4
                 match = 0
+                id_match = r"[^0-9]" + reg.escape(str(mid4)) + r"[^0-9]"
+                melu_match = r"^MELU"
                 for i in results.keys():
-                    if mid4 in results[i]['name']:
-                        # print mid3
-                        # print results[i]
+                    if reg.search(melu_match, results[i]['name']) and reg.search(id_match, results[i]['name']):
+                    # if mid4 in results[i]['name']:
+                        print id_match
+                        print results[i]
                         line = {}
                         line.update({'meluID': row[assetNameCol]})
                         line.update({'id': results[i]['id']})
@@ -190,10 +199,12 @@ def main():
                         match = 1
                 if match == 0:
                     for i in results.keys():
-                        mid3 = mid3.lstrip("0")
-                        if mid3 in results[i]['name']:
-                            # print mid3
-                            # print results[i]
+                        mid4 = mid4.lstrip("0")
+                        id_match = r"[^0-9]" + reg.escape(str(mid4)) + r"[^0-9]"
+                        if reg.search(melu_match, results[i]['name']) and reg.search(id_match, results[i]['name']):
+                        # if mid4 in results[i]['name']:
+                            print id_match
+                            print results[i]
                             line = {}
                             line.update({'meluID': row[assetNameCol]})
                             line.update({'id': results[i]['id']})
@@ -211,11 +222,11 @@ def main():
         print len(results)
         # csv_file = "melu_objs_not_a_match_" + timestr + ".csv"
         # WriteDictToCSV(csv_file, ['id', 'namespace', 'name', 'type'], final_results)
-        csv_file = "melu_obj_not_a_match_" + timestr + ".csv"
+        csv_file = "melu_spec_not_a_match_" + timestr + ".csv"
         WriteDictToCSV(csv_file, ['id','namespace','name','type'], results)
-        csv_matched_file = "melu_obj_matched_" + timestr + ".csv"
+        csv_matched_file = "melu_spec_matched_" + timestr + ".csv"
         WriteDictToCSV(csv_matched_file, ['meluID','id','namespace','name','type'], matched_results)
-        spreadsheetorphans_file = "melu_obj_orphaned_" + timestr + ".csv"
+        spreadsheetorphans_file = "melu_spec_orphaned_" + timestr + ".csv"
         WriteDictToCSV(spreadsheetorphans_file, ['meluID'], spreadsheetorphans)
 
 
