@@ -6,7 +6,10 @@ import mf_connect
 import socket
 import os
 import timeit
-import ConfigParser
+try:
+    import ConfigParser
+except:
+    import configparser
 import io
 import pickle
 import pickletools
@@ -56,7 +59,6 @@ config.readfp(io.BytesIO(ini_config))
 # Get setup information from ini file
 location = config.get('pingtest','location')
 pingFile = config.get('pingtest','pingFile')
-outputFile = config.get('pingtest','outputFile')
 namespace = "/projects/proj-demonstration-1128.4.15/ping_test"
 # Set Carbon server details
 CARBON_SERVER = config.get('pingtest','CARBON_SERVER')
