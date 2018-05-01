@@ -30,21 +30,35 @@ try:
     print projsList
 
     for proj in projsList:
-         namespace = "/projects/"+proj.value()
-         print namespace
-         projDetailsQuery = mfclient.XmlStringWriter('args')
-         projDetailsQuery.add("namespace",namespace)
-         projDetails = cxn.execute("asset.namespace.describe",projDetailsQuery.doc_text())
-         allocation = projDetails.element("namespace/quota/allocation")
-         usage = projDetails.element("namespace/quota/used")
-         # Build new line for CSV results file
-         # Format project, allocation, used
-         fields = [proj.value(), allocation.value(), usage.value()]
-         # Write results to file
-         with open(projSummary+timestr+".csv", 'ab') as f:
-             writer = csv.writer(f)
-             writer.writerow(fields)
-             f.close()
+        if proj.value() == "proj-cryoem_instrument_data-1128.4.51":
+            namespace = "/projects/cryo-em/" + proj.value()
+            projDetailsQuery = mfclient.XmlStringWriter('args')
+            projDetailsQuery.add("namespace", namespace)
+            projDetails = cxn.execute("asset.namespace.describe", projDetailsQuery.doc_text())
+            allocation = projDetails.element("namespace/quota/inherited/allocation")
+            usage = projDetails.element("namespace/quota/inherited/used")
+        else:
+            namespace = "/projects/"+proj.value()
+            projDetailsQuery = mfclient.XmlStringWriter('args')
+            projDetailsQuery.add("namespace", namespace)
+            projDetails = cxn.execute("asset.namespace.describe", projDetailsQuery.doc_text())
+            allocation = projDetails.element("namespace/quota/allocation")
+            usage = projDetails.element("namespace/quota/used")
+        print namespace
+        # projDetailsQuery = mfclient.XmlStringWriter('args')
+        # projDetailsQuery.add("namespace",namespace)
+        # projDetails = cxn.execute("asset.namespace.describe",projDetailsQuery.doc_text())
+        print projDetails
+        # allocation = projDetails.element("namespace/quota/allocation")
+        # usage = projDetails.element("namespace/quota/used")
+        # Build new line for CSV results file
+        # Format project, allocation, used
+        fields = [proj.value(), allocation.value(), usage.value()]
+        # Write results to file
+        with open(projSummary+timestr+".csv", 'ab') as f:
+            writer = csv.writer(f)
+            writer.writerow(fields)
+            f.close()
 
     storesList = cxn.execute("asset.store.list")
 
