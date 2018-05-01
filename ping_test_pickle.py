@@ -58,10 +58,9 @@ location = config.get('pingtest','location')
 pingFile = config.get('pingtest','pingFile')
 outputFile = config.get('pingtest','outputFile')
 namespace = "/projects/proj-demonstration-1128.4.15/ping_test"
-
 # Set Carbon server details
-CARBON_SERVER = '115.146.94.123'
-CARBON_PICKLE_PORT = 2004
+CARBON_SERVER = config.get('pingtest','CARBON_SERVER')
+CARBON_PICKLE_PORT = config.get('pingtest','CARBON_PICKLE_PORT')
 
 # Create mediaflux connection
 cxn = mf_connect.connect()
